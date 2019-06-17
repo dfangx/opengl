@@ -1,15 +1,18 @@
+#ifndef BUFFER_H
+#define BUFFER_H
 #include <GL/glew.h>
 #include <vector>
 class Buffer
 {
     public:
-        Buffer(GLenum type, std::vector<GLfloat> data);
-        void init();
-        void setAttributePointer();
+        virtual void bindBuffer() = 0;
 
-    private:
+    //private:
+    protected:
         GLuint bufferID;
-        GLenum type;
-        std::vector<GLfloat> data;
+        //GLenum type;
+        //std::vector<GLfloat> data;
 
+        virtual void loadBuffer() = 0;
 };
+#endif

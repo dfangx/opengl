@@ -2,6 +2,10 @@
 #include <vector>
 #include <string>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 class Shader
 {
     public:
@@ -9,6 +13,8 @@ class Shader
 
         void use();
         void setUniformFloat(std::string uniformName, GLfloat value);
+        void setUniformInt(std::string uniformName, GLuint value);
+        void setUniformMatrix(std::string uniformName, glm::mat4 value);
 
     private:
         // Generated on shader creation

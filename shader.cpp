@@ -5,6 +5,7 @@
 #include "shader.h"
 
 using namespace std;
+using namespace glm;
 
 Shader::Shader(string * shaderSourceFiles, GLuint * shaderStages):SHADER_STAGE_COMPILE(1), SHADER_LINK(2)
 {
@@ -64,6 +65,7 @@ void Shader::createShader()
 
     glBindAttribLocation(shaderID, 0, "aPos");
     glBindAttribLocation(shaderID, 1, "aColor");
+    glBindAttribLocation(shaderID, 2, "aTexCoord");
     link();
     deleteShaderStage();
 }
@@ -128,4 +130,14 @@ void Shader::shaderChecks(GLuint id, const GLuint step)
 void Shader::setUniformFloat(string uniformName, GLfloat value)
 {
     glUniform1f(glGetUniformLocation(shaderID, uniformName.c_str()), value);
+}
+
+void Shader::setUniformInt(string uniformName, GLuint value)
+{
+    glUniform1i(glGetUniformLocation(shaderID, uniformName.c_str()), value);
+}
+
+void Shader::setUniformMatrix(string uniformName, mat4 value)
+{
+    glUniformMatrix4fv(glGetUniformLocation(shaderID, uniformName.c_str()), 1, GL_FALSE, value_ptr(value));
 }
