@@ -1,7 +1,9 @@
+#include "resource_manager.h"
 #include "pong.h"
 
 Pong::Pong()
 {
+    ResourceManager rM;
 }
 
 void Pong::init()

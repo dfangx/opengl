@@ -4,7 +4,7 @@
 
 #include "shader.h"
 
-Shader::Shader()
+Shader::Shader(std::vector<std::string> shaderSourceFiles)
 {
     shaderID = glCreateProgram();
     shaderStageIdList = 
@@ -13,11 +13,9 @@ Shader::Shader()
         glCreateShader(GL_FRAGMENT_SHADER),
     };
 
-    createShader();
-}
-
-void Shader::createShader()
-{
+    compileShader(shaderSourceFiles);
+    linkShader();
+    deleteShaderStage();
 }
 
 void Shader::use()
@@ -38,14 +36,40 @@ std::string Shader::loadShaderSource(std::string fileName)
     return buffer.str();
 }
 
-void Shader::compileShader()
+void Shader::compileShader(std::vector<std::string> shaderSourceFiles)
 {
+    std::string tmp;
+
+    for (GLuint i = 0; i < shaderStageIdList.size(); i++)
+    {
+        tmp = loadShaderSource(shaderSourceFiles[i]);
+        const char * shaderSourceCode = tmp.c_str();
+
+        glShaderSource(shaderStageIdList[i], 1, &shaderSourceCode, NULL);
+
+        glCompileShader(shaderStageIdList[i]);
+
+        if (!isCompiled(shaderStageIdList[i]))
+        {
+            std::cout << "ERROR: SHADER_COMPILE: compilation failed. application terminating" << std::endl;
+            exit(EXIT_FAILURE);
+        }
+
+        glAttachShader(shaderID, shaderStageIdList[i]);
+    }
+
+    glBindAttribLocation(shaderID, 0, "aPos");
+    glBindAttribLocation(shaderID, 1, "aColor");
 }
 
 void Shader::linkShader()
 {
     glLinkProgram(shaderID);
-    isLinked();
+    if(!isLinked())
+    {
+        std::cout << "ERROR: SHADER_LINK: linking failed. application terminating" << std::endl;
+        exit(EXIT_FAILURE);
+    }
 }
 
 bool Shader::isCompiled(GLuint id)
@@ -75,7 +99,7 @@ bool Shader::isLinked()
     if (!success)
     {
         glGetShaderInfoLog(shaderID, 512, NULL, infoLog);
-        std::cout << "SHADER: linking failed. " << infoLog << std::endl;
+        std::cout << "ERROR: SHADER_LINK: linking failed. " << infoLog << std::endl;
         return false;
     }
 
@@ -84,7 +108,7 @@ bool Shader::isLinked()
 
 void Shader::deleteShaderStage()
 {
-    for (GLuint i = 0; i < (GLuint)ShaderNames::NUM_SHADERS; i++)
+    for (GLuint i = 0; i < shaderStageIdList.size(); i++)
     {
         glDeleteShader(shaderStageIdList[i]);
     }

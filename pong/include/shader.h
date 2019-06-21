@@ -9,7 +9,7 @@
 class Shader
 {
     public:
-        Shader();
+        Shader(std::vector<std::string> shaderSourceFiles);
 
         void use();
         /*
@@ -19,28 +19,17 @@ class Shader
         */
 
     private:
-        enum class ShaderNames
-        {
-            VERTEX_SHADER,
-            FRAGMENT_SHADER,
-            NUM_SHADERS 
-        };
-
         // Generated on shader creation
         GLuint shaderID;
         std::vector<GLuint> shaderStageIdList;
 
-        // Provided by the user
-        GLuint * shaderStages;      // List of shader stages to use for this shader
-        std::string * shaderSourceFiles; // List of shader source code to use for this shader program
-
-        std::string loadShaderSource(std::string fileName);
-        void compileShader();
+        void compileShader(std::vector<std::string> shaderSourceFiles);
         void linkShader();
         void deleteShaderStage();
-        void createShader();
 
         bool isCompiled(GLuint id);
         bool isLinked();
+
+        std::string loadShaderSource(std::string fileName);
 };
 #endif
