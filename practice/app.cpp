@@ -24,6 +24,9 @@ App::App(GLuint win_width, GLuint win_height, GLfloat r, GLfloat g, GLfloat b, G
    this -> g = g;
    this -> b = b;
    this -> a = a;
+
+   createWindow();
+   initGLEW();
 }
 
 App::~App()
@@ -91,45 +94,35 @@ void App::run()
         texture2.bindTexture();
         s.use();
         mat4 trans = mat4(1.0f);
-        trans = translate(trans, vec3(0.5f, -0.5f, 0.0f));
         trans = rotate(trans, (float)glfwGetTime(), vec3(0.0f, 0.0f, 1.0f));
+        trans = translate(trans, vec3(0.5f, -0.5f, 0.0f));
         s.setUniformMatrix("transform", trans);
         vao.bindVAO();
         //glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        mat4 trans2 = mat4(1.0);
+        trans2 = translate(trans2, vec3(-0.5f, 0.5f, 0.0f));
+        trans2 = scale(trans2, vec3(sin((float)glfwGetTime()), sin((float)glfwGetTime()), sin((float)glfwGetTime())));
+        s.setUniformMatrix("transform", trans2);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 };
 
-void App::draw(GLuint vao)
-{
-}
-
-void App::init()
-{
-    cout << "APP: creating window..." << endl;
-    createWindow();
-    cout << "APP: initializing GLEW" << endl;
-    initGLEW();
-    cout << "APP: initialization complete" << endl;
-
-}
-
 void App::createWindow()
 {
     // initializes glfw library
     if (!glfwInit()){
-        cout << "GLFW: initialization failed \n";
+        cout << "ERROR: GLFW: initialization failed" << endl;
         exit(EXIT_FAILURE);
     }
 
-    
     // create a window and context
     window = glfwCreateWindow(win_width, win_height, "Simple Window", NULL, NULL);
     if (!window)
     {
-        cout << "GLFW: failed to create window \n";
+        cout << "ERROR: GLFW: failed to create window" << endl;
         glfwTerminate();
 
         exit(EXIT_FAILURE);
@@ -148,14 +141,18 @@ void App::initGLEW()
     GLenum glewError = glewInit();
     if (glewError != GLEW_OK)
     {
-        cout << "GLEW: initialization failed. Error: " << glewGetErrorString(glewError) << "\n";
+        cout << "ERROR: GLEW: initialization failed. Error: " << glewGetErrorString(glewError) << endl;
+        glfwTerminate();
+
         exit(EXIT_FAILURE);
     }
 
     // check if opengl 2.1 is supported
     if (!GLEW_VERSION_2_1)
     {
-        cout << "GLEW: OpenGl 2.1 not supported.\n";
+        cout << "ERROR: GLEW: OpenGl 2.1 not supported" << endl;
+        glfwTerminate();
+
         exit(EXIT_FAILURE);
     }
 }

@@ -7,7 +7,6 @@ class App
         App(GLuint win_width, GLuint win_height, GLfloat r = 1, GLfloat g = 1, GLfloat b = 1, GLfloat a = 1);
         ~App();
 
-        void init();
         void run();
 
     private:
@@ -17,5 +16,5 @@ class App
 
         void createWindow();
         void initGLEW();
-        void draw(GLuint vao);
+
 };
