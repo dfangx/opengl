@@ -1,41 +1,35 @@
+#include <iostream>
 #include "resource_manager.h"
+#include "vertex_buffer.h"
+#include "element_buffer.h"
 
 ResourceManager::ResourceManager()//std::vector<std::string> shaderSourceFiles, std::vector<std::string> textureFiles)
 {
     initShaders();
-    initBuffers();
+    initVAO();
     initTextures();
 }
 
 void ResourceManager::initShaders()
 {
-    //tmp
-    std::vector<std::string> shaderSourceFiles
-    {
-        "shader_src/vertex_shader.glsl",
-        "shader_src/fragment_shader.glsl"
-    };
-
-    Shader s (shaderSourceFiles);
-    shaderList.insert(std::pair<std::string, Shader*>("shader1", &s));
+    Shader s (dS.getShaderSourceFiles());
+    shaderList.insert(std::make_pair(dS.ShaderNames::BOXSHADER, &s));
 }
 
 void ResourceManager::initVAO()
 {
-    //tmp
-    std::vector<std::array<GLuint, 4>> vertexSettings
-    {
-        {0, 3, 8, 0},
-        {1, 3, 8, 3},
-        {2, 2, 8, 6}
-    };
-
-    VertexArrayObject vao(vertexSettings);
-    vaoList.insert(std::pair<std::string, VertexArrayObject *> ("vao1", &vao));
+    VertexArrayObject vao(dS.getVertexAttrib());
+    initBuffers();
+    vao.setAttributePointers();
+    std::cout << "RESOURCE_MANAGER: registering VAO " << std::endl;
+    vaoList.insert(std::make_pair(dS.VAONames::VAO_1, &vao));
+    std::cout << "RESOURCE_MANAGER: done creating VAO" << std::endl;
 }
 
 void ResourceManager::initBuffers()
 {
+    VertexBuffer vB(dS.getVertices());
+    ElementBuffer eB(dS.getIndices());
 }
 
 void ResourceManager::initTextures()
@@ -46,7 +40,12 @@ void ResourceManager::cleanup()
 {
 }
 
-Shader ResourceManager::getShader(std::string shaderName)
+Shader * ResourceManager::getShader(GLenum shaderName)
 {
-    return *shaderList[shaderName];
+    return shaderList[shaderName];
+}
+
+VertexArrayObject * ResourceManager::getVAO(GLenum vaoName)
+{
+    return vaoList[vaoName];
 }

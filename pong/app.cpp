@@ -6,6 +6,7 @@
 
 #include "app.h"
 #include "pong.h"
+#include "debug.h"
 
 App::App(GLuint win_width, GLuint win_height, GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 {
@@ -29,6 +30,7 @@ App::~App()
 
 void App::run()
 {
+    querySpecs();
     Pong pong;
 
     while (!glfwWindowShouldClose(window))

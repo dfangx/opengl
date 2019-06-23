@@ -11,7 +11,8 @@ class Buffer
     protected:
         GLuint bufferID;
 
-        virtual void loadBuffer() = 0;
+        virtual void loadBuffer(std::vector<GLfloat> data){};
+        virtual void loadBuffer(std::vector<GLuint> indices){};
 };
 #endif
 

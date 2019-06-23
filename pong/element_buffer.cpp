@@ -1,16 +1,16 @@
 #include "element_buffer.h"
 
-ElementBuffer::ElementBuffer(std::vector<GLuint> data)
+ElementBuffer::ElementBuffer(std::vector<GLuint> indices)
 {
     glGenBuffers(1, &bufferID);
     bindBuffer();
-    loadBuffer(data);
+    loadBuffer(indices);
 }
 
-void ElementBuffer::loadBuffer(std::vector<GLuint> data)
+void ElementBuffer::loadBuffer(std::vector<GLuint> indices)
 {
     // copy data into currently bound buffer
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * data.size(), data.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), indices.data(), GL_STATIC_DRAW);
 }
 
 

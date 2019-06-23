@@ -1,10 +1,5 @@
-#include "resource_manager.h"
+#include <iostream>
 #include "pong.h"
-
-Pong::Pong()
-{
-    ResourceManager rM;
-}
 
 void Pong::init()
 {
@@ -20,5 +15,8 @@ void Pong::update()
 
 void Pong::render()
 {
+    rM.getShader(DataStorage::ShaderNames::BOXSHADER)->use();
+    rM.getVAO(DataStorage::VAONames::VAO_1)->bindVAO();
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 

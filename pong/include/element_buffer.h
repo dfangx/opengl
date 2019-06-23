@@ -6,9 +6,9 @@
 class ElementBuffer:public Buffer
 {
     public:
-        ElementBuffer(std::vector<GLuint> data);
+        ElementBuffer(std::vector<GLuint> indices);
         void bindBuffer();
     private:
-        void loadBuffer(std::vector<GLuint> data);
+        void loadBuffer(std::vector<GLuint> indices);
 };
 #endif

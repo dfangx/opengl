@@ -6,16 +6,19 @@
 
 #include "shader.h"
 #include "vertex_array_object.h"
+#include "data_storage.h"
 
 class ResourceManager
 {
     public:
         ResourceManager();//std::vector<std::string> shaderSourceFiles, std::vector<std::string> textureFiles);
-        Shader getShader(std::string shaderName);
+        Shader* getShader(GLenum shaderName);
+        VertexArrayObject* getVAO(GLenum vaoName);
         //Texture getTexture(std::string textureName);
     private:
-        std::map<std::string, Shader * > shaderList;
-        std::map<std::string, VertexArrayObject * > vaoList;
+        DataStorage dS;
+        std::map<GLenum, Shader*> shaderList;
+        std::map<GLenum, VertexArrayObject*> vaoList;
 //        Texture * textureList;
 
         void initShaders();

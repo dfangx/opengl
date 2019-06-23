@@ -31,6 +31,7 @@ std::string Shader::loadShaderSource(std::string fileName)
 
     input.open(fileName);
     buffer << input.rdbuf();
+
     input.close();
     
     return buffer.str();
@@ -59,7 +60,7 @@ void Shader::compileShader(std::vector<std::string> shaderSourceFiles)
     }
 
     glBindAttribLocation(shaderID, 0, "aPos");
-    glBindAttribLocation(shaderID, 1, "aColor");
+    //glBindAttribLocation(shaderID, 1, "aColor");
 }
 
 void Shader::linkShader()
@@ -70,6 +71,7 @@ void Shader::linkShader()
         std::cout << "ERROR: SHADER_LINK: linking failed. application terminating" << std::endl;
         exit(EXIT_FAILURE);
     }
+
 }
 
 bool Shader::isCompiled(GLuint id)
@@ -94,11 +96,11 @@ bool Shader::isLinked()
     GLint success;
     char infoLog[512];
 
-    glGetShaderiv(shaderID, GL_LINK_STATUS, &success);
+    glGetProgramiv(shaderID, GL_LINK_STATUS, &success);
 
     if (!success)
     {
-        glGetShaderInfoLog(shaderID, 512, NULL, infoLog);
+        glGetProgramInfoLog(shaderID, 512, NULL, infoLog);
         std::cout << "ERROR: SHADER_LINK: linking failed. " << infoLog << std::endl;
         return false;
     }
@@ -113,3 +115,4 @@ void Shader::deleteShaderStage()
         glDeleteShader(shaderStageIdList[i]);
     }
 }
+

@@ -1,9 +1,9 @@
 #ifndef PONG_H
 #define PONG_H
+#include "resource_manager.h"
 class Pong
 {
     public:
-        Pong();
 
         void processInput();
         void update();
@@ -17,6 +17,7 @@ class Pong
             GAME_P1_WIN,
             GAME_P1_LOSE
         };
+        ResourceManager rM;
 
         void init();
 };
